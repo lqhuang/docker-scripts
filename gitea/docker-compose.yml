@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  server:
+    image: gitea/gitea:1.8.2
+    container_name: gitea
+    hostname: gitea
+    restart: always
+    volumes:
+      # - ./data:/data
+      - data:/data
+    environment:
+      - RUN_MODE=prod
+      - USER_UID=1000 # user id
+      - USER_GID=1000 # user group id
+      - DISABLE_SSH=true
+      - DISABLE_REGISTRATION=true
+      - SECRET_KEY=
+      - ROOT_URL=
+      - DB_TYPE=sqlite3
+      - DB_HOST=localhost:3306
+      - DB_USER=
+      - DB_PASSWD=
+      - DB_NAME=
+    # ports:
+    #   - 3000:3000
+    #   - 22:22
+
+  proxy:
+    image: abiosoft/caddy:no-stats
+    container_name: gitea-caddy
+    hostname: gitea-caddy
+    environment:
+      - ACME_AGREE=true
+    volumes:
+      - ./Caddyfile:/etc/Caddyfile
+      - ./.caddy:/root/.caddy
+    ports:
+      - 80:80
+      - 443:443
+      # - 2015:2015 # for debug
+
+volumes:
+  data:

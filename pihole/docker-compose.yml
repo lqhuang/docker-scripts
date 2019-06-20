@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  pihole:
+    image: pihole/pihole:4.3.1-2_amd64
+    container_name: pihole
+    restart: always
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 67:67/udp
+      - 5380:80/tcp
+      # - 80:80/tcp
+      # - 443:443/tcp
+    environment:
+      TZ: "Asia/Shanghai"
+      # WEBPASSWORD: 'set a secure password here or it will be random'
+    # Volumes store your data between container upgrades
+    volumes:
+      - pihole-etc:/etc/pihole/
+      - pihole-dnsmasq:/etc/dnsmasq.d/
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+      - 8.8.8.8
+      - 119.29.29.29
+      - 223.5.5.5
+    # Recommended but not required (DHCP needs NET_ADMIN)
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN
+    network_mode: "bridge"
+
+volumes:
+  pihole-etc:
+  pihole-dnsmasq:

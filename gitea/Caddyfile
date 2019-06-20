@@ -1,0 +1,3 @@
+git.example.io {
+    proxy / gitea:3000
+}
