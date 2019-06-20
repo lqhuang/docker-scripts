@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  portainer:
+    image: portainer/portainer:1.20.2
+    name: portainer
+    container_name: portainer
+    hostname: portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - data:/data
+      # - ./data:/data
+    network_mode: "bridge"
+
+volumes:
+  data:
