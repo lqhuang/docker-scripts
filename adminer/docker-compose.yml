@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  adminer:
+    image: adminer:4.7.1-standalone # or `fastcgi`
+    container_name: adminer
+    hostname: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    # environment:
+    #   - ADMINER_DESIGN='nette'
+    #   - ADMINER_PLUGINS='tables-filter tinymce'
+    network_mode: "bridge"

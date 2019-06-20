@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  plantuml:
+    image: plantuml/plantuml-server:jetty
+    restart: always
+    container_name: plantuml
+    hostname: plantuml
+    domainname: plantuml
+    network_mode: bridge
+    ports:
+      - 8080:8080
