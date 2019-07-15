@@ -1,0 +1,77 @@
+version: "3"
+
+services:
+  jira-software:
+    image: cptactionhank/atlassian-jira-software:8.1.0
+    container_name: jira-software
+    hostname: jira-software
+    domainname: jira-software
+    restart: always
+    environment:
+      - LANG=C.UTF-8
+      - CATALINA_OPTS= -javaagent:/var/atlassian/atlassian-agent.jar -Xms512m -Xmx4g -Datlassian.plugins.enable.wait=300 -Duser.timezone=Asia/Shanghai
+      # a space between `=` and `-args` is absolutely necessary。
+    volumes:
+      - jira-software-data:/var/atlassian/jira
+      - jira-software-logs:/opt/atlassian/jira/logs
+    ports:
+      - 8080:8080
+    network_mode: bridge
+    depends_on:
+      - jira-db
+    external_links:
+      - jira-db:jira-db
+    stop_grace_period: 30s
+
+  confluence:
+    image: cptactionhank/atlassian-confluence:6.14.1
+    container_name: confluence
+    hostname: confluence
+    domainname: confluence
+    restart: always
+    environment:
+      - LANG=C.UTF-8
+      - CATALINA_OPTS= -javaagent:/var/atlassian/atlassian-agent.jar -Xms512m -Xmx2g -Duser.timezone=Asia/Shanghai
+      # a space between `=` and `-args` is absolutely necessary。
+    volumes:
+      - confluence-data:/var/atlassian/confluence
+      - confluence-logs:/opt/atlassian/confluence/logs
+    ports:
+      - 8090:8090
+    network_mode: bridge
+    depends_on:
+      - jira-software
+      - jira-db
+    external_links:
+      - jira-software:jira-software
+      - jira-db:jira-db
+    stop_grace_period: 30s
+
+  jira-db:
+    image: postgres:11.3-alpine
+    container_name: jira-db
+    hostname: jira-db
+    domainname: jira-db
+    restart: always
+    # ports:
+    #   - 5432:5432
+    volumes:
+      - jira-db:/var/lib/postgresql/data
+      - ./create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
+    environment:
+      # - PGHOST=localhost
+      # - POSTGRES_DB=jira
+      - LANG=C.UTF-8
+      - POSTGRES_MULTIPLE_DATABASES=jira,confluence
+      - POSTGRES_USER=fatri
+      - POSTGRES_PASSWORD=fatri-jira
+    # env_file:
+    #   - db.env
+    network_mode: bridge
+
+volumes:
+  jira-software-data:
+  jira-software-logs:
+  jira-db:
+  confluence-data:
+  confluence-logs:
