@@ -2,7 +2,7 @@ version: "3"
 
 services:
   adminer:
-    image: adminer:4.7.1-standalone # or `fastcgi`
+    image: adminer:4.7.6-standalone # or `fastcgi`
     container_name: adminer
     hostname: adminer
     restart: always

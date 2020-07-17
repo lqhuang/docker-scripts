@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   zero:
-    image: dgraph/dgraph:v1.1.1
+    image: dgraph/dgraph:v2.0.0-beta
     restart: on-failure
     volumes:
       - ./data:/dgraph
@@ -12,7 +12,7 @@ services:
     command: dgraph zero --my=zero:5080
 
   server:
-    image: dgraph/dgraph:v1.1.1
+    image: dgraph/dgraph:v2.0.0-beta
     restart: on-failure
     volumes:
       - ./data:/dgraph
@@ -20,10 +20,10 @@ services:
       - 7090:7090
       - 8090:8090
       - 9090:9090
-    command: dgraph alpha --my=server:7090 --lru_mb=2048 --zero=zero:5080 --port_offset=10
+    command: dgraph alpha --my=server:7090 --lru_mb=4096 --zero=zero:5080 --port_offset=10
 
   ratel:
-    image: dgraph/dgraph:v1.1.1
+    image: dgraph/dgraph:v2.0.0-beta
     restart: on-failure
     ports:
       - 8000:8000
