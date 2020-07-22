@@ -14,7 +14,7 @@ services:
     # Note: you cannot scale a service beyond 1 container if you have specified a custom name.
     # container_name: kafka
     ports:
-      - 9092-9099:9092
+      - 9092
     environment:
       KAFKA_ADVERTISED_HOST_NAME: 192.168.100.21
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
