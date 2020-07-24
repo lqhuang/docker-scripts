@@ -13,6 +13,7 @@ services:
     image: wurstmeister/kafka:2.12-2.5.0
     # Note: you cannot scale a service beyond 1 container if you have specified a custom name.
     # container_name: kafka
+    restart: always
     ports:
       - 9092
     environment:
@@ -24,6 +25,7 @@ services:
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
     container_name: kafdrop
+    restart: always
     ports:
       - 9001:9000
     environment:
