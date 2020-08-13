@@ -2,7 +2,8 @@
 
 ## Run
 
-    docker-compose up -d
+    export HOST_IP=`ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p'`
+    docker-compose up -d --scale=3
 
 ## References:
 
