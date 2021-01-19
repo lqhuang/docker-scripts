@@ -2,13 +2,13 @@ version: "3"
 
 services:
   portainer:
-    image: portainer/portainer:1.20.2
-    name: portainer
+    image: portainer/portainer:1.24.0
     container_name: portainer
     hostname: portainer
-    command: -H unix:///var/run/docker.sock
     restart: always
+    command: -H unix:///var/run/docker.sock
     ports:
+      # - 8000:8000
       - 9000:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

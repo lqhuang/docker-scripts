@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  cloudflare-ddns:
+    image: oznu/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    restart: always
+    environment:
+      - API_KEY=${API_KEY?}
+      - ZONE=${ZONE?}
+      - SUBDOMAIN=${SUBDOMAIN?}
+      - DNS_SERVER=${DNS_SERVER?}
+      - PROXIED=false
+      - CRON=@daily
+    network_mode: "bridge"

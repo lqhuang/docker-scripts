@@ -2,7 +2,7 @@ version: "3"
 
 services:
   ss-server:
-    image: shadowsocks/shadowsocks-libev:v3.2.5
+    image: shadowsocks/shadowsocks-libev:v3.3.3
     container_name: ss-server
     hostname: ss-server
     restart: always
@@ -15,4 +15,15 @@ services:
       - ARGS=-v --fast-oepn
     # volumes:
     #   - /dev/urandom:/dev/random
+    
+    cmd: exec ss\
+      -s $SERVER_ADDR \
+      -p $SERVER_PORT \
+      -k ${PASSWORD:-$(hostname)} \
+      -m $METHOD \
+      -t $TIMEOUT \
+      -d $DNS_ADDRS \
+      -u \
+      $ARGS
+
     network_mode: "bridge"
