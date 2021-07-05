@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  caddy:
+    # image: caddy:<version>
+    build:
+      context: .
+      args:
+        VERSION: "2.4.3"
+    restart: always
+    container_name: caddy
+    # ports:
+    #   - "80:80"
+    #   - "443:443"
+    volumes:
+      # - ./Caddyfile:/etc/caddy/Caddyfile
+      # - ./site:/srv
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+      - ./config.json:/etc/caddy/config.json
+    environment:
+      - EMAIL=your@email.me
+      - CF_API_TOKEN=XXXXX
+    network_mode: "bridge"
+    command: ["caddy", "run", "--config", "/etc/caddy/config.json"]

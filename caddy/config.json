@@ -1,0 +1,32 @@
+{
+  "apps": {
+    "tls": {
+      "certificates": {
+        "automate": [
+          "example.com",
+          "example.net"
+        ]
+      },
+      "automation": {
+        "policies": [
+          {
+            "issuers": [
+              {
+                "module": "acme",
+                "email": "{env.EMAIL}",
+                "challenges": {
+                  "dns": {
+                    "provider": {
+                      "name": "cloudflare",
+                      "api_token": "{env.CF_API_TOKEN}"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
