@@ -4,6 +4,7 @@ services:
   emby:
     image: emby/embyserver:4.6.4.0
     container_name: embyserver
+    hostname: embyserver
     # runtime: nvidia # Expose NVIDIA GPUs
     restart: always
     network_mode: host # Enable DLNA and Wake-on-Lan

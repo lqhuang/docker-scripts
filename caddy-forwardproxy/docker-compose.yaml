@@ -2,6 +2,8 @@ version: "3.7"
 
 services:
   caddy:
+    # If you specify `image` as well as `build`, then Compose names the built image specified in `image`.
+    image: custom-caddy:2.4.6
     build:
       context: .
       args:
