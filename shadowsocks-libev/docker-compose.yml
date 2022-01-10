@@ -2,21 +2,21 @@ version: "3"
 
 services:
   ss-server:
-    image: shadowsocks/shadowsocks-libev:v3.3.3
+    image: shadowsocks/shadowsocks-libev:v3.3.5
     container_name: ss-server
     hostname: ss-server
     restart: always
+    network_mode: "bridge"
     ports:
       - 8388:8388
       - 8388:8388/udp
     environment:
       - PASSWORD=hello,world
       - METHOD=chacha20-ietf-poly1305
-      - ARGS=-v --fast-oepn
+      - ARGS=-v
     # volumes:
     #   - /dev/urandom:/dev/random
-    
-    cmd: exec ss\
+    command: ss-server \
       -s $SERVER_ADDR \
       -p $SERVER_PORT \
       -k ${PASSWORD:-$(hostname)} \
@@ -25,5 +25,3 @@ services:
       -d $DNS_ADDRS \
       -u \
       $ARGS
-
-    network_mode: "bridge"

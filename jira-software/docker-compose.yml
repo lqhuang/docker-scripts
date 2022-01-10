@@ -14,6 +14,7 @@ services:
     volumes:
       - jira-software-data:/var/atlassian/jira
       - jira-software-logs:/opt/atlassian/jira/logs
+      # - ./atlassian-agent.jar:/var/atlassian/atlassian-agent.jar
     ports:
       - 8080:8080
     network_mode: bridge
@@ -36,6 +37,7 @@ services:
     volumes:
       - confluence-data:/var/atlassian/confluence
       - confluence-logs:/opt/atlassian/confluence/logs
+      # - ./atlassian-agent.jar:/var/atlassian/atlassian-agent.jar
     ports:
       - 8090:8090
     network_mode: bridge
