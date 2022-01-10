@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  caddy:
+    build:
+      context: .
+      args:
+        VERSION: "2.4.6"
+    container_name: caddy
+    hostname: caddy
+    restart: always
+    ports:
+      # - 80:80
+      - 443:443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      # - ./site:/srv
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+      # - ./config.json:/etc/caddy/config.json
+    environment:
+      DOMAIN: example.com
+      EMAIL: hello@example.com
+      # USERNAME:
+      # PASSWORD:
+      # PROBE_RESISTANCE_LINK:
+    network_mode: "bridge"
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]

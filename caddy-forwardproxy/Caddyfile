@@ -1,0 +1,26 @@
+{
+  admin off
+  servers :443 {
+    protocol {
+      experimental_http3
+      strict_sni_host
+    }
+  }
+}
+
+:443 {$DOMAIN}
+
+tls {$EMAIL}
+
+route {
+  forward_proxy {
+    basic_auth {$USERNAME:user} {$PASSWORD:pass}
+    hide_ip
+    hide_via
+    probe_resistance {$PROBE_RESISTANCE_LINK:wikipedia.org}
+  }
+  handle * {
+    reverse_proxy httpbin.org
+    rewrite /* /json
+  }
+}
