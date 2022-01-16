@@ -2,35 +2,27 @@ version: "3"
 
 services:
   pihole:
-    image: pihole/pihole:4.3.1-2_amd64
+    image: pihole/pihole:2022.01.1
     container_name: pihole
+    hostname: pihole
     restart: always
     ports:
       - 53:53/tcp
       - 53:53/udp
-      - 67:67/udp
+      # - 67:67/udp  # Only required if you are using Pi-hole as your DHCP server
       - 5380:80/tcp
       # - 80:80/tcp
       # - 443:443/tcp
     environment:
       TZ: "Asia/Shanghai"
-      # WEBPASSWORD: 'set a secure password here or it will be random'
-    # Volumes store your data between container upgrades
+      DNSSEC: "true"
+      DNSMASQ_LISTENING: "all"  # set to `all` if network_mode="bridge"
+      WEBPASSWORD: "${WEBPASSWORD:-random}"
+      FTLCONF_BLOCKINGMODE: "NULL"
     volumes:
-      - pihole-etc:/etc/pihole/
-      - pihole-dnsmasq:/etc/dnsmasq.d/
-    dns:
-      - 127.0.0.1
-      - 1.1.1.1
-      - 8.8.8.8
-      - 119.29.29.29
-      - 223.5.5.5
-    # Recommended but not required (DHCP needs NET_ADMIN)
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-    cap_add:
-      - NET_ADMIN
+      - ./etc-pihole:/etc/pihole/
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d/
+    # cap_add:
+    #   - NET_BIND_SERVICE  # enabled by default
+    #   - NET_ADMIN  # required by DHCP
     network_mode: "bridge"
-
-volumes:
-  pihole-etc:
-  pihole-dnsmasq:

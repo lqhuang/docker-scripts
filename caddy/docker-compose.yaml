@@ -20,8 +20,10 @@ services:
       - ./caddy_data:/data
       - ./caddy_config:/config
       - ./config.json:/etc/caddy/config.json
-    environment:
-      - EMAIL=your@email.me
-      - CF_API_TOKEN=XXXXX
+    # environment:
+    #   - EMAIL=your@email.me
+    #   - CF_API_TOKEN=XXXXX
+    env_file:
+      - .env
     network_mode: "bridge"
     command: ["caddy", "run", "--config", "/etc/caddy/config.json"]
