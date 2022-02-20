@@ -1,0 +1,94 @@
+{
+    admin off
+
+    # TLS Options
+    email {$EMAIL}
+    skip_install_trust
+    acme_dns namecheap {
+        user {env.NAMECHEAP_API_USER}
+        api_key {env.NAMECHEAP_API_KEY}
+    }
+
+    servers :443 {
+        protocol {
+            experimental_http3
+            strict_sni_host
+        }
+    }
+}
+
+(common_header_up) {
+    header_up Host {upstream_hostport}
+    header_up X-Forwarded-Host {host}
+    header_up X-Real-IP {remote_host}
+    header_up X-Forwarded-For {remote_host}
+    header_up X-Forwarded-Proto {scheme}
+}
+
+(common_header) {
+    header {
+        # disable FLoC tracking
+        Permissions-Policy interest-cohort=()
+
+        # enable HSTS
+        Strict-Transport-Security max-age=31536000;
+
+        # disable clients from sniffing the media type
+        X-Content-Type-Options nosniff
+
+        # clickjacking protection
+        X-Frame-Options DENY
+
+        # keep referrer data off of HTTP connections
+        Referrer-Policy no-referrer-when-downgrade
+    }
+}
+
+https://gitlab.example.com, https://git.example.com {
+
+    log {
+        output file /logs/gitlab.access.log
+    }
+
+    import common_header
+
+    route {
+        handle_path /kroki/*  {
+            reverse_proxy kroki:8000
+        }
+
+        reverse_proxy gitlab-ce:8181 {
+            import common_header_up
+        }
+    }
+}
+
+https://*.pages.example.com {
+    log {
+        output file /logs/gitlab-pages.access.log
+    }
+
+    import common_header
+
+    reverse_proxy gitlab-ce:8090 {
+        import common_header_up
+    }
+}
+
+https://container.registry.example.com {
+    log {
+        output file /logs/gitlab-container.access.log
+    }
+
+    # disable any limits to avoid HTTP 413 for large image uploads
+    request_body {
+        max_size 0
+    }
+
+    import common_header
+    header ?Docker-Distribution-Api-Version "registry/2.0"
+
+    reverse_proxy gitlab-ce:5000 {
+        import common_header_up
+    }
+}
