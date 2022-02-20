@@ -3,18 +3,15 @@ version: "3"
 services:
   sslocal:
     image: sgrio/alpine-sslocalproxy
-    container_name: ss-local
-    hostname: ss-local
+    container_name: ss-local-privoxy
+    hostname: ss-local-privoxy
     restart: always
+    ports:
+      - 1080:1080
+      - 8118:8118
     volumes:
       - /dev/urandom:/dev/random
       - ./config.json:/etc/shadowsocks-libev/config.json
+      # - ./privoxy-config:/etc/privoxy/config
+      # - ./gfwlist.action:/etc/privoxy/gfwlist.action
     network_mode: "bridge"
-    # extra_hosts: ss-local
-    # networks:
-    #   bridge:
-    #     ipv4_address: 172.17.0.6
-
-# networks:
-#   bridge:
-#     external: true
