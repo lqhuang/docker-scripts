@@ -6,14 +6,14 @@ services:
     # ghcr.io/dreamacro/clash-premium
     # dreamacro/clash
     # dreamacro/clash-premium
-    image: dreamacro/clash:v1.3.5
+    image: dreamacro/clash:v1.9.0
     container_name: clash
     restart: always
     volumes:
       - ./config.yaml:/root/.config/clash/config.yaml
       - ./ui:/ui # dashboard volume
     ports:
-      - "7890:7890"
-      - "7891:7891"
-      - "9090:9090" # external controller (Restful API)
+      - 7890:7890
+      - 7891:7891
+      - 9090:9090 # external controller (Restful API)
     network_mode: "bridge" # or "host" on Linux
