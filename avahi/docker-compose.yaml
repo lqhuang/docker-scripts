@@ -11,6 +11,6 @@ services:
     environment:
       # SERVER_DOMAIN_NAME: ".local"
       SERVER_ENABLE_DBUS: "no"
-      SERVER_DISALLOW_OTHER_STACKS: "yes"
+      # SERVER_DISALLOW_OTHER_STACKS: "yes"
       REFLECTOR_ENABLE_REFLECTOR: "yes"  # Make sure to not run multiple reflectors between the same networks, this might cause them to play Ping Pong with mDNS packets.
     network_mode: "host"

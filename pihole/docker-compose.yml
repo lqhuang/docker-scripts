@@ -15,9 +15,11 @@ services:
       # - 443:443/tcp
     environment:
       TZ: "Asia/Shanghai"
-      DNSSEC: "true"
       DNSMASQ_LISTENING: "all"  # set to `all` if network_mode="bridge"
-      WEBPASSWORD: "${WEBPASSWORD:-random}"
+      WEBPASSWORD: "${WEBPASSWORD:?}"
+      DNSSEC: "true"
+      DNS_BOGUS_PRIV: "true"
+      DNS_FQDN_REQUIRED: "true"
       FTLCONF_BLOCKINGMODE: "NULL"
     volumes:
       - ./etc-pihole:/etc/pihole/
@@ -26,3 +28,17 @@ services:
     #   - NET_BIND_SERVICE  # enabled by default
     #   - NET_ADMIN  # required by DHCP
     network_mode: "bridge"
+
+      # unbound:
+      #  container_name: unbound
+      # image: mvance/unbound:latest
+      # hostname: syn-unbound
+       # mac_address: d0:ca:ab:cd:ef:02
+       #  ports:
+       # - 53/tcp
+       #- 53/udp
+       #networks:
+       # home:
+       # ipv4_address: 192.168.1.6
+       #restart: always
+
