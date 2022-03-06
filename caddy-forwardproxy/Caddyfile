@@ -3,7 +3,7 @@
   servers :443 {
     protocol {
       experimental_http3
-      strict_sni_host
+      # strict_sni_host  # will cause proxy failed
     }
   }
 }
