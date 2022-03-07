@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  naiveproxy-jp:
+    image: lqhuang/naiveproxy:naiveproxy-v99.0.4844.51-1
+    container_name: naiveproxy
+    hostname: naiveproxy
+    restart: always
+    ports:
+      - 1080:1080
+      - 1080:1080/udp
+    network_mode: "bridge"
+    command: [
+        "--listen=socks://0.0.0.0:1080",
+        "--proxy=quic://user:pass@your-domain.example",
+        # "--log=",
+      ]
