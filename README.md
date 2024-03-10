@@ -16,3 +16,9 @@ Frequently used docker scripts for depolyment
 - portainer
 - shadowsocks-libev
 - ss-local
+
+## Similar projects
+
+- [Compose-Examples](https://github.com/Haxxnet/Compose-Examples)
+- [stilleshan/dockerfiles](https://github.com/stilleshan/dockerfiles)
+- [docker/awesome-compose](https://github.com/docker/awesome-compose)

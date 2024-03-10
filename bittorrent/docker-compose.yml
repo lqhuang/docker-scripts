@@ -1,0 +1,68 @@
+version: "3"
+
+services:
+  qbittorrent: # https://hub.docker.com/r/linuxserver/qbittorrent
+    image: linuxserver/qbittorrent
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - UMASK_SET=022
+      - WEBUI_PORT=8080
+    volumes:
+      - ./qbittorrent/appdata/config:/config
+      - ./qbittorrent/downloads:/downloads
+    # ports:
+    #   - 6881:6881
+    #   - 6881:6881/udp
+    #   - 8080:8080
+    restart: unless-stopped
+
+  transmission: # https://hub.docker.com/r/linuxserver/transmission
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - TRANSMISSION_WEB_HOME=/kettu/ # /transmission-web-control/ # /combustion-release/ #optional
+    volumes:
+      - ./transmission/data:/config
+      - ./transmission/downloads:/downloads
+      - ./transmission/watch:/watch
+    # ports:
+    #   - 9091:9091
+    #   - 51413:51413
+    #   - 51413:51413/udp
+    restart: unless-stopped
+
+  deluge: # https://hub.docker.com/r/linuxserver/deluge
+    image: linuxserver/deluge
+    container_name: deluge
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - TZ=Europe/London
+    volumes:
+      - ./deluge/config:/config
+      - ./deluge/downloads:/downloads
+    restart: unless-stopped
+
+  rutorrent: # https://hub.docker.com/r/linuxserver/rutorrent
+    image: linuxserver/rutorrent
+    container_name: rutorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./rutorrent/config:/config
+      - ./rutorrent/downloads:/downloads
+    # ports:
+    #   - 80:80
+    #   - 5000:5000
+    #   - 51413:51413
+    #   - 6881:6881/udp
+    restart: unless-stopped

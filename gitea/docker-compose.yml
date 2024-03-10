@@ -2,43 +2,44 @@ version: "3"
 
 services:
   server:
-    image: gitea/gitea:1.8.2
+    image: gitea/gitea:1.16.0
     container_name: gitea
     hostname: gitea
     restart: always
     volumes:
-      # - ./data:/data
-      - data:/data
+      - ./gitea-data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
     environment:
       - RUN_MODE=prod
       - USER_UID=1000 # user id
       - USER_GID=1000 # user group id
+      - ROOT_URL=${ROOT_URL?}
       - DISABLE_SSH=true
       - DISABLE_REGISTRATION=true
-      - SECRET_KEY=
-      - ROOT_URL=
+      - SECRET_KEY=gitea-secret
       - DB_TYPE=sqlite3
       - DB_HOST=localhost:3306
-      - DB_USER=
-      - DB_PASSWD=
-      - DB_NAME=
-    # ports:
-    #   - 3000:3000
-    #   - 22:22
+      - DB_USER=root
+      - DB_PASSWD=gitea
+      - DB_NAME=gitea
+      - ENABLE_PUSH_CREATE_USER=true
+      - REQUIRE_SIGNIN_VIEW=true
+      # - LFS_START_SERVER=true
+      # - LFS_JWT_SECRET=lfs-secret
+    ports:
+      - 127.0.0.1:3000:3000
+      # - 22:22
 
-  proxy:
-    image: abiosoft/caddy:no-stats
-    container_name: gitea-caddy
-    hostname: gitea-caddy
-    environment:
-      - ACME_AGREE=true
-    volumes:
-      - ./Caddyfile:/etc/Caddyfile
-      - ./.caddy:/root/.caddy
+  caddy:
+    image: caddy:2.4.6
+    restart: always
+    container_name: caddy
+    hostname: caddy
     ports:
       - 80:80
       - 443:443
-      # - 2015:2015 # for debug
-
-volumes:
-  data:
+      - 443:443/udp
+    command: ["caddy", "run", "--config", "/etc/caddy/config.json"]

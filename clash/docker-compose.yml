@@ -10,7 +10,7 @@ services:
     container_name: clash
     restart: always
     volumes:
-      - ./config.yaml:/root/.config/clash/config.yaml
+      - ./config.yaml:/root/.config/clash/config.yaml:ro
       - ./ui:/ui # dashboard volume
     ports:
       - 7890:7890
